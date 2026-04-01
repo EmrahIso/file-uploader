@@ -13,7 +13,31 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
+  id String @id @default(uuid())
   name String @unique
+  password String?
+
+  files File[]
+
+  createdAt DateTime @default(now())
+}
+
+model File {
+  id String @id @default(uuid())
+  name String
+  url String
+  size Int
+  type String
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id String @id 
+  sid String @unique
+  data String 
+  expiresAt DateTime
 }
