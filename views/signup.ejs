@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Sign Up</h2>
+      <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+        <div class="form-errors">
+          <ul>
+            <% errors.forEach(function(error) { %>
+              <li><%= error.msg %></li>
+            <% }); %>
+          </ul>
+        </div>
+      <% } %>
+      <form action="/signup" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            minlength="4"
+            maxlength="20"
+            required
+            value="<%= typeof oldInput !== 'undefined' && oldInput.username ? oldInput.username : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            minlength="8"
+            maxlength="20"
+            required
+            value="<%= typeof oldInput !== 'undefined' && oldInput.password ? oldInput.password : '' %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            minlength="8"
+            maxlength="20"
+            required
+            value="<%= typeof oldInput !== 'undefined' && oldInput.confirmPassword ? oldInput.confirmPassword : '' %>"
+          />
+        </div>
+        <button type="submit" class="login-btn">Sign Up</button>
+      </form>
+      <div class="signup-link">
+        Already have an account? <a href="/login">Login</a>
+      </div>
+    </div>
+  </body>
+</html>
