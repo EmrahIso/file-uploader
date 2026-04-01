@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Uploader</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <% if (loggedIn) { %>
+    <%- include('partials/nav', { navVariant: 'dashboard' }) %>
+
+    <main class="container dashboard">
+      <h1 class="title">Welcome back<%= user?.name ? `, ${user.name}` : '' %></h1>
+      <p class="subtitle">Manage uploads and continue your work from one place.</p>
+
+      <div class="dashboard-actions">
+        <a href="/upload" class="btn">Upload New File</a>
+      </div>
+    </main>
+  <% } else { %>
+    <main class="container guest">
+      <h1 class="title">Welcome to FileUploader</h1>
+      <p class="subtitle">Please log in or create an account to start uploading files.</p>
+
+      <div class="guest-actions">
+        <a href="/login" class="btn">Login</a>
+        <a href="/signup" class="btn btn-secondary">Signup</a>
+      </div>
+    </main>
+  <% } %>
+</body>
+</html>
