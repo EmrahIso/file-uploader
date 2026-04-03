@@ -18,21 +18,45 @@ model User {
   password String?
 
   files File[]
+  folders Folder[]
 
   createdAt DateTime @default(now())
 }
 
-model File {
+model Folder {
   id String @id @default(uuid())
   name String
-  url String
-  size Int
-  type String
+
+  parentId String?
+  parent Folder? @relation("FolderToFolder", fields: [parentId], references: [id])
+  children Folder[] @relation("FolderToFolder")
+
+  files File[]
 
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@unique([name, parentId, userId])
+}
+
+model File {
+  id String @id @default(uuid())
+  name String
+  path String
+  size Int
+  mimeType String
+
+  folderId String?
+  folder Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([name, folderId, userId])
 }
 
 model Session {
