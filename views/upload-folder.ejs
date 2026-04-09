@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New folder</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%- include('partials/nav', { navVariant: 'upload-folder'}) %>
+
+    <main class="container upload-page">
+      <div class="login-container upload-container upload-split">
+        <h2>New folder</h2>
+        <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+          <div class="form-errors">
+            <ul>
+              <% errors.forEach(function (error) { %>
+                <li><%= error.msg || error %></li>
+              <% }); %>
+            </ul>
+          </div>
+        <% } %>
+
+        <form action="/folder?folder=<%= parentId %>" method="POST">
+          <div class="upload-panel">
+            <h3 class="upload-panel-title">Destination</h3>
+            <p class="upload-panel-hint">
+              New folder will be created inside parent folder:
+              <strong><%= parentFolderName === null ? '/root' : '/' + parentFolderName %></strong>
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label for="name" style="margin-top: 15px;">Folder name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              maxlength="20"
+              minlength="2"
+              required
+              autocomplete="off"
+              value="<%= typeof oldInput !== 'undefined' && oldInput.name ? oldInput.name : '' %>"
+            />
+          </div>
+          <button type="submit" class="login-btn">Create folder</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

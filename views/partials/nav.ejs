@@ -1,13 +1,7 @@
-<% var variant = typeof navVariant !== 'undefined' ? navVariant : 'dashboard'; %>
 <nav class="navbar">
   <a href="/" class="brand">FileUploader</a>
   <div class="nav-actions">
-    <% if (variant === 'upload') { %>
-      <a href="/" class="btn btn-secondary">Home</a>
-    <% } else { %>
-      <a href="/upload" class="btn">Add File</a>
-    <% } %>
-    <form method="POST" action="/logout" style="display: inline;">
+    <form method="POST" action="/logout" style="display: inline">
       <button type="submit" class="btn btn-logout">Logout</button>
     </form>
   </div>

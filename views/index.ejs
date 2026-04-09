@@ -8,26 +8,126 @@
 </head>
 <body>
   <% if (loggedIn) { %>
-    <%- include('partials/nav', { navVariant: 'dashboard' }) %>
 
-    <main class="container dashboard">
-      <h1 class="title">Welcome back<%= user?.name ? `, ${user.name}` : '' %></h1>
-      <p class="subtitle">Manage uploads and continue your work from one place.</p>
+    <%- include('partials/nav') %>
 
-      <div class="dashboard-actions">
-        <a href="/upload" class="btn">Upload New File</a>
+    <main class="container dashboard dashboard-repo">
+      <h1 class="title title-repo">
+        Welcome back<%= user?.name ? `, ${user.name}` : '' %>
+      </h1>
+
+      <p class="subtitle subtitle-repo">
+        Browse folders and files. Add uploads for the folder you are in.
+      </p>
+
+      <!-- Breadcrumb -->
+      <nav class="repo-breadcrumb">
+
+        <% if (currentFolderName || currentFolderName === null) { %>
+          <span class="repo-bc-sep">/</span>
+          <span class="repo-bc-part"><%= currentFolderName === null ? 'root' : currentFolderName %></span>
+        <% } %>
+      </nav>
+
+      <!-- Toolbar -->
+      <div class="repo-toolbar">
+        <a href="/file?folder=<%= currentFolderId %>" class="btn">Add file</a>
+        <a href="/folder?folder=<%= currentFolderId %>" class="btn btn-secondary">Add folder</a>
+      </div>
+
+      <!-- Browser -->
+      <div class="repo-browser">
+        <div class="repo-browser-header">
+          <span class="repo-h-name">Name</span>
+          <span class="repo-h-mime">MIME type</span>
+          <span class="repo-h-time">Upload time</span>
+          <span class="repo-h-size">Size</span>
+          <span class="repo-h-action">Download</span>
+          <span class="repo-h-delete">Delete</span>
+        </div>
+
+        <ul class="repo-list">
+
+          <!-- BACK -->
+          <% if (currentFolderId) { %>
+            <li class="repo-row repo-row-parent">
+              <p class="repo-cell repo-cell-name repo-cell-link">
+                <span class="repo-icon repo-icon-parent"></span>
+                <a href="/files<%= parentFolderId ? `?folder=${parentFolderId}` : '?folder=' %>" class="repo-name-text">..</a>
+              </p>
+              <span class="repo-cell repo-cell-dim">—</span>
+              <span class="repo-cell repo-cell-dim">—</span>
+              <span class="repo-cell repo-cell-dim">—</span>
+              <span class="repo-cell repo-cell-action"></span>
+            </li>
+          <% } %>
+
+          <!-- FOLDERS -->
+          <% browseFolders.forEach(folder => { %>
+            <li class="repo-row repo-row-folder">
+              <p class="repo-cell repo-cell-name repo-cell-link">
+                <span class="repo-icon repo-icon-folder"></span>
+                <a href="/files?folder=<%= folder.id %>" class="repo-name-text">
+                  <%= folder.name %>
+                </a>
+              </p>
+              <span class="repo-cell repo-cell-tag repo-cell-folder-tag">Folder</span>
+              <span class="repo-cell repo-cell-dim"><%= folder.createdAt || '—' %></span>
+              <span class="repo-cell repo-cell-dim">—</span>
+              <span class="repo-cell repo-cell-action"></span>
+              <span class="repo-cell repo-cell-delete">
+                <form action="/folder/<%= folder.id %>?_method=DELETE" method="POST" style="display:inline">
+                  <button type="submit" class="repo-delete-btn">Delete</button>
+                </form>
+              </span>
+            </li>
+          <% }) %>
+
+          <!-- FILES -->
+          <% browseFiles.forEach(file => { %>
+            <li class="repo-row repo-row-file">
+              <div class="repo-cell repo-cell-name">
+                <span class="repo-icon repo-icon-file"></span>
+                <span class="repo-name-text"><%= file.name %></span>
+              </div>
+              <span class="repo-cell repo-cell-mono repo-mime"><%= file.mimeType || '—' %></span>
+              <span class="repo-cell repo-time"><%= file.createdAt || '—' %></span>
+              <span class="repo-cell repo-size"><%= file.size || '—' %></span>
+              <div class="repo-cell repo-cell-action">
+                <a href="/download/<%= file.id %>" class="repo-download-btn">Download</a>
+              </div>
+              <span class="repo-cell repo-cell-delete">
+                <form action="/file/<%= file.id %>?_method=DELETE" method="POST" style="display:inline">
+                  <button type="submit" class="repo-delete-btn" >Delete</button>
+                </form>
+              </span>
+            </li>
+          <% }) %>
+
+        </ul>
+
+        <!-- EMPTY -->
+        <% if (browseFolders.length === 0 && browseFiles.length === 0) { %>
+          <p class="repo-empty">
+            This folder is empty. Use <strong>Add file</strong> or <strong>Add folder</strong>.
+          </p>
+        <% } %>
+
       </div>
     </main>
+
   <% } else { %>
+
     <main class="container guest">
       <h1 class="title">Welcome to FileUploader</h1>
-      <p class="subtitle">Please log in or create an account to start uploading files.</p>
+      <p class="subtitle">Please log in or create an account.</p>
 
       <div class="guest-actions">
         <a href="/login" class="btn">Login</a>
         <a href="/signup" class="btn btn-secondary">Signup</a>
       </div>
     </main>
+
   <% } %>
 </body>
 </html>
