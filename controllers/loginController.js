@@ -1,7 +1,14 @@
 import passport from 'passport';
 
 const getLogIn = (req, res) => {
-  res.render('login');
+  if (res.locals.loggedIn && req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+
+  res.render('login', {
+    errors: [],
+    oldInput: [],
+  });
 };
 
 const postLogIn = (req, res, next) => {

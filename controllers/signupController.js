@@ -2,6 +2,10 @@ import { addUser } from '../services/userService.js';
 import { generatePassword } from '../utils/passwordUtils.js';
 
 const getSignUp = (req, res) => {
+  if (res.locals.loggedIn && req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+
   res.render('signup', { errors: [], oldInput: {} });
 };
 
