@@ -45,8 +45,8 @@ model File {
   id String @id @default(uuid())
   name String
   path String
-  size Int
-  mimeType String
+  size BigInt
+  mimeType String?
 
   folderId String?
   folder Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)

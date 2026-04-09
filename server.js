@@ -3,6 +3,7 @@ import path from 'node:path';
 import session from 'express-session';
 import helmet from 'helmet';
 import passport from 'passport';
+import multer from 'multer';
 
 import { fileURLToPath } from 'node:url';
 import { config } from 'dotenv';
@@ -14,12 +15,16 @@ import { indexRouter } from './routes/indexRouter.js';
 import { loginRouter } from './routes/loginRouter.js';
 import { singUpRouter } from './routes/signupRouter.js';
 import { logoutRouter } from './routes/logoutRouter.js';
-import { uploadRouter } from './routes/uploadRouter.js';
+import { fileRouter } from './routes/fileRouter.js';
+import { folderRouter } from './routes/folderRouter.js';
+import { showFolderRouter } from './routes/showFolderRouter.js';
 
 import { isAuth } from './middlewares/isAuth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const upload = multer({ dest: 'uploads/' });
 
 if (process.env.NODE_ENV !== 'production') {
   config();
@@ -69,11 +74,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/signup', singUpRouter);
-app.use('/login', loginRouter);
-app.use('/logout', logoutRouter);
-app.use('/upload', uploadRouter);
+app.use('/', indexRouter); //
+app.use('/signup', singUpRouter); //
+app.use('/login', loginRouter); //
+app.use('/logout', logoutRouter); //
+app.use('/file', fileRouter);
+app.use('/folder', folderRouter); //
+app.use('/files', showFolderRouter);
 
 app.get('/health', isAuth, (req, res) => {
   res.send('You are authenticated! :)');
@@ -89,3 +96,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {});
+
+// http://localhost:8080/files?folder=c9207e8e-b1cc-4c7f-b48e-9525e93d2cda
