@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import { getSignUp, postSignUp } from '../controllers/signupController.js';
 
+import { requireGuest } from '../middlewares/requireGuest.js';
+
 import {
   signupValidationRules,
   validateSignup,
@@ -9,8 +11,14 @@ import {
 
 const singUpRouter = Router();
 
-singUpRouter.get('/', getSignUp);
+singUpRouter.get('/', requireGuest, getSignUp);
 
-singUpRouter.post('/', signupValidationRules, validateSignup, postSignUp);
+singUpRouter.post(
+  '/',
+  requireGuest,
+  signupValidationRules,
+  validateSignup,
+  postSignUp
+);
 
 export { singUpRouter };

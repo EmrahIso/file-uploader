@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import { getLogIn, postLogIn } from '../controllers/loginController.js';
 
+import { requireGuest } from '../middlewares/requireGuest.js';
+
 import {
   loginValidationRules,
   validateLogin,
@@ -9,8 +11,14 @@ import {
 
 const loginRouter = Router();
 
-loginRouter.get('/', getLogIn);
+loginRouter.get('/', requireGuest, getLogIn);
 
-loginRouter.post('/', loginValidationRules, validateLogin, postLogIn);
+loginRouter.post(
+  '/',
+  requireGuest,
+  loginValidationRules,
+  validateLogin,
+  postLogIn
+);
 
 export { loginRouter };
