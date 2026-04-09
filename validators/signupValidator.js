@@ -40,7 +40,7 @@ function validateSignup(req, res, next) {
 
   if (!errors.isEmpty()) {
     return res.status(400).render('signup', {
-      errors: errors.array.map((error) => ({
+      errors: errors.array().map((error) => ({
         field: error.path,
         msg: error.msg,
       })),
