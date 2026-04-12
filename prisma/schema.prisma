@@ -28,7 +28,7 @@ model Folder {
   name String
 
   parentId String?
-  parent Folder? @relation("FolderToFolder", fields: [parentId], references: [id])
+  parent Folder? @relation("FolderToFolder", fields: [parentId], references: [id], onDelete: Cascade)
   children Folder[] @relation("FolderToFolder")
 
   files File[]
