@@ -41,7 +41,7 @@ const getFolderByIdAndUserId = async ({ userId, id }) => {
 const getFolderById = async ({ id }) => {
   if (id === undefined) throw new Error('FolderId is required.');
 
-  const folder = await prisma.folder.findUnique({
+  const folder = await prisma.folder.findFirst({
     where: {
       id,
     },
@@ -80,10 +80,25 @@ const addNewFolder = async ({ name, parentId, userId }) => {
   return user;
 };
 
+const removeFolderById = async ({ id, userId }) => {
+  if (!userId) throw new Error('UserId is required.');
+  if (id === undefined) throw new Error('FolderId is required.');
+
+  const folder = await prisma.folder.delete({
+    where: {
+      userId,
+      id,
+    },
+  });
+
+  return folder;
+};
+
 export {
   isFolderNameTaken,
   addNewFolder,
   getAllNestedFoldersByParentIdAndUserId,
   getFolderByIdAndUserId,
   getFolderById,
+  removeFolderById,
 };

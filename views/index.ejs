@@ -76,7 +76,7 @@
               <span class="repo-cell repo-cell-dim">—</span>
               <span class="repo-cell repo-cell-action"></span>
               <span class="repo-cell repo-cell-delete">
-                <form action="/folder/<%= folder.id %>?_method=DELETE" method="POST" style="display:inline">
+                <form action="/folder/delete?folder=<%= folder.id %>" method="POST" style="display:inline">
                   <button type="submit" class="repo-delete-btn">Delete</button>
                 </form>
               </span>
@@ -97,7 +97,7 @@
                 <a href="/download/<%= file.id %>" class="repo-download-btn">Download</a>
               </div>
               <span class="repo-cell repo-cell-delete">
-                <form action="/file/<%= file.id %>?_method=DELETE" method="POST" style="display:inline">
+                <form action="/file/delete?file=<%= file.id %>" method="POST" style="display:inline">
                   <button type="submit" class="repo-delete-btn" >Delete</button>
                 </form>
               </span>
