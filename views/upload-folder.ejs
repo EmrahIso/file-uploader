@@ -22,7 +22,7 @@
           </div>
         <% } %>
 
-        <form action="/folder?folder=<%= parentId %>" method="POST">
+        <form action="/folder?folder=<%= parentId ? parentId : '' %>" method="POST">
           <div class="upload-panel">
             <h3 class="upload-panel-title">Destination</h3>
             <p class="upload-panel-hint">

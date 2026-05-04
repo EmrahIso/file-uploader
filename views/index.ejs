@@ -88,13 +88,13 @@
             <li class="repo-row repo-row-file">
               <div class="repo-cell repo-cell-name">
                 <span class="repo-icon repo-icon-file"></span>
-                <span class="repo-name-text"><%= file.name %></span>
+                <a href="/file/<%= file.id %>" class="repo-name-text file-details-link"><%= file.name %></a>
               </div>
               <span class="repo-cell repo-cell-mono repo-mime"><%= file.mimeType || '—' %></span>
               <span class="repo-cell repo-time"><%= file.createdAt || '—' %></span>
               <span class="repo-cell repo-size"><%= file.size || '—' %></span>
               <div class="repo-cell repo-cell-action">
-                <a href="/download/<%= file.id %>" class="repo-download-btn">Download</a>
+                <a href="/file/download/<%= file.id %>" class="repo-download-btn">Download</a>
               </div>
               <span class="repo-cell repo-cell-delete">
                 <form action="/file/delete?file=<%= file.id %>" method="POST" style="display:inline">

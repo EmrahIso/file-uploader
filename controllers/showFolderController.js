@@ -2,6 +2,7 @@ import {
   getFolderByIdAndUserId,
   getAllNestedFoldersByParentIdAndUserId,
 } from '../services/folderService.js';
+import { getAllFilesByFolderIdAndUserId } from '../services/fileService.js';
 
 export const getShowFolder = async (req, res) => {
   try {
@@ -18,9 +19,14 @@ export const getShowFolder = async (req, res) => {
       userId,
     });
 
+    const browseFiles = await getAllFilesByFolderIdAndUserId({
+      folderId,
+      userId,
+    });
+
     return res.render('index', {
       browseFolders,
-      browseFiles: [],
+      browseFiles,
       currentFolderId: folderId,
       parentFolderId: currentFolder?.parentId || null,
       currentFolderName: currentFolder?.name || null,
@@ -28,13 +34,6 @@ export const getShowFolder = async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    throw error;
+    next(error);
   }
 };
-
-/*
-
-TODO: Napravi provjeru sa getFolderById (nova funkcija) da sprijecis da jedan korisnik pristupi folderu drugog korisnika:
-folderService.js i checkFolderOwnership.js
-
-*/

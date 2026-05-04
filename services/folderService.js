@@ -1,14 +1,14 @@
 import { prisma } from '../lib/prisma.js';
 
 const isFolderNameTaken = async ({ name, parentId, userId }) => {
-  if (parentId !== null && !parentId) throw new Error('parentId is required.');
+  if (!parentId && parentId !== null) throw new Error('parentId is required.');
   if (!name) throw new Error('Name is required.');
   if (!userId) throw new Error('UserId is required.');
 
   const folder = await prisma.folder.findFirst({
     where: {
       name,
-      parentId: parentId || null,
+      parentId: parentId ?? null,
       userId,
     },
   });
@@ -18,7 +18,7 @@ const isFolderNameTaken = async ({ name, parentId, userId }) => {
 
 const getFolderByIdAndUserId = async ({ userId, id }) => {
   if (!userId) throw new Error('UserId is required.');
-  if (id === undefined) throw new Error('folderId is required.');
+  if (!id && id !== null) throw new Error('folderId is required.');
 
   if (id === null) {
     return {
@@ -39,7 +39,11 @@ const getFolderByIdAndUserId = async ({ userId, id }) => {
 };
 
 const getFolderById = async ({ id }) => {
-  if (id === undefined) throw new Error('FolderId is required.');
+  if (!id && id !== null) throw new Error('FolderId is required.');
+
+  if (id === null) {
+    return null;
+  }
 
   const folder = await prisma.folder.findFirst({
     where: {
@@ -51,12 +55,12 @@ const getFolderById = async ({ id }) => {
 };
 
 const getAllNestedFoldersByParentIdAndUserId = async ({ parentId, userId }) => {
-  if (parentId !== null && !parentId) throw new Error('parentId is required.');
+  if (!parentId && parentId !== null) throw new Error('parentId is required.');
   if (!userId) throw new Error('UserId is required.');
 
   const folders = await prisma.folder.findMany({
     where: {
-      parentId,
+      parentId: parentId ?? null,
       userId,
     },
   });
@@ -65,14 +69,14 @@ const getAllNestedFoldersByParentIdAndUserId = async ({ parentId, userId }) => {
 };
 
 const addNewFolder = async ({ name, parentId, userId }) => {
-  if (parentId !== null && !parentId) throw new Error('parentId is required.');
+  if (!parentId && parentId !== null) throw new Error('parentId is required.');
   if (!name) throw new Error('Name is required.');
   if (!userId) throw new Error('UserId is required.');
 
   const user = await prisma.folder.create({
     data: {
       name,
-      parentId,
+      parentId: parentId ?? null,
       userId,
     },
   });
@@ -82,7 +86,7 @@ const addNewFolder = async ({ name, parentId, userId }) => {
 
 const removeFolderById = async ({ id, userId }) => {
   if (!userId) throw new Error('UserId is required.');
-  if (id === undefined) throw new Error('FolderId is required.');
+  if (!id && id !== null) throw new Error('FolderId is required.');
 
   const folder = await prisma.folder.delete({
     where: {

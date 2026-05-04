@@ -1,4 +1,5 @@
 import { getAllNestedFoldersByParentIdAndUserId } from '../services/folderService.js';
+import { getAllFilesByFolderIdAndUserId } from '../services/fileService.js';
 
 const getIndex = async (req, res) => {
   try {
@@ -20,9 +21,14 @@ const getIndex = async (req, res) => {
       userId,
     });
 
+    const browseFiles = await getAllFilesByFolderIdAndUserId({
+      folderId: parentId,
+      userId,
+    });
+
     return res.render('index', {
       browseFolders,
-      browseFiles: [],
+      browseFiles: browseFiles,
       currentFolderId: null,
       parentFolderId: null,
       currentFolderName: 'root',
@@ -30,7 +36,7 @@ const getIndex = async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    throw error;
+    next(error);
   }
 };
 

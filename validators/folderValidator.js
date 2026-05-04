@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator';
 
-import { isFolderNameTaken } from '../services/folderService.js';
+import { isFolderNameTaken, getFolderById } from '../services/folderService.js';
 
 const folderValidationRules = [
   body('name')
@@ -10,33 +10,25 @@ const folderValidationRules = [
     .isLength({ min: 2, max: 20 })
     .withMessage('Name must be between 2 and 20 characters long.')
     .matches(/^[^<>:"/\\|?*]+$/)
-    .withMessage('Invalid characters')
-    .custom(async (value, { req }) => {
-      const parentId = req.body.parentId || null;
-
-      const isTaken = await isFolderNameTaken({
-        name: value,
-        parentId: parentId,
-        userId: req.user.id,
-      });
-
-      if (isTaken) throw new Error('Name is already taken.');
-
-      return true;
-    }),
+    .withMessage('Invalid characters'),
 ];
 
-function validateFolder(req, res, next) {
+async function validateFolder(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    const parentId = req.query.folder === '' ? null : req.query.folder;
+
+    const parent = await getFolderById({ id: parentId });
+
     return res.status(400).render('upload-folder', {
       errors: errors.array().map((error) => ({
         field: error.path,
         msg: error.msg,
       })),
       oldInput: req.body,
-      parentFolderName: req.body.parentFolderName || null,
+      parentId: parentId,
+      parentFolderName: parent === null ? null : parent.name,
     });
   }
 

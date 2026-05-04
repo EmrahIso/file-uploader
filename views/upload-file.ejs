@@ -26,38 +26,29 @@
         <% } %>
 
         <form
-          action="/file"
+          action="/file?folder=<%=  parentId ? parentId : ''  %>"
           method="POST"
           enctype="multipart/form-data"
         >
-          <input type="hidden" name="parentId" value="<%= parentId %>" />
-
-          <div class="upload-panel">
+          <div class="upload-panel" style="margin-bottom: 25px;">
             <h3 class="upload-panel-title">Destination</h3>
             <p class="upload-panel-hint">
               Parent folder:
-              <strong><%= parentFolderName %></strong>
+              <strong><%= parentFolderName === null ? '/' : parentFolderName %></strong>
             </p>
           </div>
 
           <div class="form-group">
-            <label for="title">Title</label>
+            <label for="name">Name</label>
             <input
               type="text"
-              id="title"
-              name="title"
-              maxlength="200"
-              value="<%= typeof oldInput !== 'undefined' && oldInput.title ? oldInput.title : '' %>"
+              id="name"
+              name="name"
+              maxlength="40"
+              minlength="5"
+              required
+              value="<%= typeof oldInput !== 'undefined' && oldInput.name ? oldInput.name : '' %>"
             />
-          </div>
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              rows="4"
-              maxlength="2000"
-            ><%= typeof oldInput !== 'undefined' && oldInput.description ? oldInput.description : '' %></textarea>
           </div>
           <div class="form-group">
             <label for="file">File</label>

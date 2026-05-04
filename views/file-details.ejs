@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Details - <%= file.name %></title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%- include('partials/nav') %>
+
+    <div class="file-details-container">
+      <h2><%= file.name %></h2>
+      <ul>
+        <li><strong>Size:</strong> <%= file.size %> bytes</li>
+        <li><strong>Type:</strong> <%= file.mimetype %></li>
+        <li><strong>Uploaded at:</strong> <%= file.uploadedAt %></li>
+        <!-- Add more details if needed -->
+      </ul>
+      <a href="/uploads/<%= file.storedName %>" class="download-btn" download
+        >Download file</a
+      >
+      <form
+        action="/file/delete?file=<%= file.id %>"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit" class="repo-delete-btn" style="margin-left: 12px">
+          Delete
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

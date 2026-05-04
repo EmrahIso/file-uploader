@@ -6,7 +6,7 @@ import {
   validateFolderQuery,
 } from '../validators/folderQueryValidator.js';
 
-import { checkFolderOwnership } from '../middlewares/checkFolderOwnership.js';
+import { checkShowFolderOwnership } from '../middlewares/checkFolderOwnership.js';
 
 import { isAuth } from '../middlewares/isAuth.js';
 
@@ -17,7 +17,7 @@ showFolderRouter.get(
   isAuth,
   folderQueryValidator,
   validateFolderQuery,
-  checkFolderOwnership,
+  checkShowFolderOwnership,
   getShowFolder
 );
 

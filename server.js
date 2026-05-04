@@ -3,7 +3,6 @@ import path from 'node:path';
 import session from 'express-session';
 import helmet from 'helmet';
 import passport from 'passport';
-import multer from 'multer';
 
 import { fileURLToPath } from 'node:url';
 import { config } from 'dotenv';
@@ -23,8 +22,6 @@ import { isAuth } from './middlewares/isAuth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const upload = multer({ dest: 'uploads/' });
 
 if (process.env.NODE_ENV !== 'production') {
   config();
@@ -74,12 +71,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter); //
-app.use('/signup', singUpRouter); //
-app.use('/login', loginRouter); //
-app.use('/logout', logoutRouter); //
+app.use('/', indexRouter);
+app.use('/signup', singUpRouter);
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 app.use('/file', fileRouter);
-app.use('/folder', folderRouter); //
+app.use('/folder', folderRouter);
 app.use('/files', showFolderRouter);
 
 app.get('/health', isAuth, (req, res) => {
@@ -91,10 +88,48 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.message === 'Invalid file type') {
+    return res.status(400).render('upload-file', {
+      errors: ['Invalid file type'],
+      parentId: null,
+      oldInput: [],
+      parentFolderName: null,
+    });
+  }
+
+  if (err.message === 'Folder name is already taken.') {
+    return res.status(400).render('upload-folder', {
+      errors: ['Folder name is already taken.'],
+      parentId: null,
+      oldInput: [],
+      parentFolderName: null,
+    });
+  }
+
+  if (err.message === 'File name is already taken.') {
+    return res.status(400).render('upload-file', {
+      errors: ['File name is already taken.'],
+      parentId: null,
+      oldInput: [],
+      parentFolderName: null,
+    });
+  }
+
+  if (err.message === 'LIMIT_FILE_SIZE') {
+    return res.status(400).render('upload-file', {
+      errors: ['Name is already taken.'],
+      parentId: null,
+      oldInput: [],
+      parentFolderName: null,
+    });
+  }
+
+  if (err.message === 'You do not have permission to access this folder') {
+    res.status(403).json({ msg: err.message });
+  }
+
   console.error(err);
   res.status(500).render('500');
 });
 
 app.listen(PORT, () => {});
-
-// http://localhost:8080/files?folder=c9207e8e-b1cc-4c7f-b48e-9525e93d2cda

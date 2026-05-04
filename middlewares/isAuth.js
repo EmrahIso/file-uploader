@@ -1,4 +1,5 @@
 export const isAuth = (req, res, next) => {
+  console.log('provjera');
   if (req.isAuthenticated()) {
     return next();
   }
